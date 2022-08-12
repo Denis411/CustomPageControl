@@ -24,6 +24,7 @@ class ViewController: UIViewController {
         }
         view.backgroundColor = .white
         
+        customPageControl.delegate = self
         setPageVC()
         setVCsForPageVC()
     }
@@ -101,4 +102,8 @@ extension ViewController: UIPageViewControllerDataSource, UIPageViewControllerDe
     }
 }
 
-extension ViewController
+extension ViewController: CustomPageControlDelegate {
+    func shouldChangePresentedController(for index: Int) {
+        pageVC.setViewControllers([pages[index]], direction: .forward, animated: true, completion: nil)
+    }
+}
