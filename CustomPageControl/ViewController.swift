@@ -9,11 +9,11 @@ import UIKit
 import SnapKit
 
 class ViewController: UIViewController {
-    let customPageControl = CustomPageControl(taps: ["First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh"])
-    var pages: [UIViewController] = []
+    private let customPageControl = CustomPageControl(taps: ["First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh"])
+    private var pages: [UIViewController] = []
 
-    let pageVC = UIPageViewController()
-    let initialVCIndex = 0
+    private let pageVC = UIPageViewController()
+    private var currentlyPresentedVC = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,21 +62,22 @@ class ViewController: UIViewController {
         pages.append(vcSix)
         pages.append(vcSeven)
         
-        pageVC.setViewControllers([pages[initialVCIndex]], direction: .forward, animated: true, completion: nil)
+        pageVC.setViewControllers([pages[currentlyPresentedVC]], direction: .forward, animated: true, completion: nil)
         
         pageVC.dataSource = self
+        pageVC.delegate = self
     }
 }
 
-extension ViewController: UIPageViewControllerDataSource {
+extension ViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let currentIndex = pages.firstIndex(of: viewController) else { return nil}
         
         if currentIndex == 0 {
-            customPageControl.changeIndexOfCurrentVC(for: pages.count - 1)
+            currentlyPresentedVC = pages.count - 1
             return pages.last
         } else {
-            customPageControl.changeIndexOfCurrentVC(for: currentIndex - 1)
+            currentlyPresentedVC = currentIndex - 1
             return pages[currentIndex - 1]
         }
     }
@@ -85,11 +86,18 @@ extension ViewController: UIPageViewControllerDataSource {
         guard let currentIndex = pages.firstIndex(of: viewController) else { return nil}
         
         if currentIndex < pages.count - 1 {
-            customPageControl.changeIndexOfCurrentVC(for: currentIndex + 1)
+            currentlyPresentedVC = currentIndex + 1
             return pages[currentIndex + 1]
         } else {
-            customPageControl.changeIndexOfCurrentVC(for: 0)
+            currentlyPresentedVC = 0
             return pages.first
         }
     }
+
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        if completed {
+            customPageControl.changeIndexOfCurrentVC(for: currentlyPresentedVC)
+        }
+    }
 }
+
