@@ -45,11 +45,51 @@ class ViewController: UIViewController {
         vcTwo.view.backgroundColor = .blue
         let vcThree = UIViewController()
         vcThree.view.backgroundColor = .yellow
+        let vcFour = UIViewController()
+        vcFour.view.backgroundColor = .orange
+        let vcFive = UIViewController()
+        vcFive.view.backgroundColor = .blue
+        let vcSix = UIViewController()
+        vcSix.view.backgroundColor = .yellow
+        let vcSeven = UIViewController()
+        vcSeven.view.backgroundColor = .black
         
         pages.append(vcOne)
         pages.append(vcTwo)
         pages.append(vcThree)
+        pages.append(vcFour)
+        pages.append(vcFive)
+        pages.append(vcSix)
+        pages.append(vcSeven)
         
         pageVC.setViewControllers([pages[initialVCIndex]], direction: .forward, animated: true, completion: nil)
+        
+        pageVC.dataSource = self
+    }
+}
+
+extension ViewController: UIPageViewControllerDataSource {
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        guard let currentIndex = pages.firstIndex(of: viewController) else { return nil}
+        
+        if currentIndex == 0 {
+            customPageControl.changeIndexOfCurrentVC(for: pages.count - 1)
+            return pages.last
+        } else {
+            customPageControl.changeIndexOfCurrentVC(for: currentIndex - 1)
+            return pages[currentIndex - 1]
+        }
+    }
+    
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        guard let currentIndex = pages.firstIndex(of: viewController) else { return nil}
+        
+        if currentIndex < pages.count - 1 {
+            customPageControl.changeIndexOfCurrentVC(for: currentIndex + 1)
+            return pages[currentIndex + 1]
+        } else {
+            customPageControl.changeIndexOfCurrentVC(for: 0)
+            return pages.first
+        }
     }
 }
