@@ -175,9 +175,9 @@ final class CustomPageControl: UIView {
     }
     
     private func setScrollOffset(forViewInFrame: CGRect) {
-        let endPointOfView = forViewInFrame.origin.x + forViewInFrame.width
+        let endPointOfView = forViewInFrame.origin.x
         
-        if endPointOfView < scroll.frame.maxX {
+        if (endPointOfView + forViewInFrame.origin.x) < scroll.frame.maxX {
             scroll.setContentOffset(CGPoint(x: forViewInFrame.origin.x, y: 0), animated: true)
         } else {
             return
