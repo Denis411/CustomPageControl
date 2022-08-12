@@ -10,7 +10,11 @@ import SnapKit
 
 class ViewController: UIViewController {
     let customPageControl = CustomPageControl(taps: ["First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh"])
+    var pages: [UIViewController] = []
 
+    let pageVC = UIPageViewController()
+    let initialVCIndex = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(customPageControl)
@@ -19,174 +23,33 @@ class ViewController: UIViewController {
             make.height.equalTo(100)
         }
         view.backgroundColor = .white
-    }
-}
-
-
-final class IndexableLabel: UILabel {
-    public var index: Int
-    
-    init(index: Int) {
-        self.index = index
-        super.init(frame: .zero)
+        
+        setPageVC()
+        setVCsForPageVC()
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-protocol customPageControlDelegate {
-    func shouldChangePresentedController(for index: Int)
-}
-
-final class CustomPageControl: UIView {
-    private let taps: [String]
-    private var labels: [IndexableLabel] = []
-    private let viewHeight: CGFloat = 50.0
-    
-    private let scroll = UIScrollView()
-    private let stack = UIStackView()
-    private let separator = UIView()
-    private let heighLighter = UIView()
-    
-    private var leftConstraintForHeighLighter  = NSLayoutConstraint()
-    private var heightConstraintForHeighLighter = NSLayoutConstraint()
-    
-    private(set) var indexOfCurrentVC: Int = 0
-    
-    var delegate: customPageControlDelegate?
-    
-    init(taps: [String]) {
-        self.taps = taps
-        super.init(frame: .zero)
-        setUpUI()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setUpUI() {
-        self.clipsToBounds = true
-        createLabels()
-        setUpScrollView()
-        setUpStackView()
-        setSeparator()
-        setHeighLighter()
-    }
-    
-    private func createLabels() {
-        for index in 0..<taps.count {
-            let label = IndexableLabel(index: index)
-            label.text = taps[index]
-            label.font = .systemFont(ofSize: 20)
-            labels.append(label)
-            stack.addArrangedSubview(label)
+    private func setPageVC() {
+        guard let pageView = pageVC.view else { return }
+        view.addSubview(pageView)
+        pageView.snp.makeConstraints { make in
+            make.top.equalTo(customPageControl.snp.bottom)
+            make.left.right.bottom.equalToSuperview()
         }
-        
-        let gr = UITapGestureRecognizer(target: self, action: #selector(addForLabel(_:)))
-        gr.cancelsTouchesInView = false
-        scroll.addGestureRecognizer(gr)
+        pageView.backgroundColor = .green
     }
     
-    private func setUpScrollView() {
-        self.addSubview(scroll)
-        scroll.bounces = false
-        scroll.showsHorizontalScrollIndicator = false
-        scroll.showsVerticalScrollIndicator = false
+    private func setVCsForPageVC() {
+        let vcOne = UIViewController()
+        vcOne.view.backgroundColor = .orange
+        let vcTwo = UIViewController()
+        vcTwo.view.backgroundColor = .blue
+        let vcThree = UIViewController()
+        vcThree.view.backgroundColor = .yellow
         
-        scroll.snp.makeConstraints { make in
-            make.top.left.right.equalToSuperview()
-            make.height.equalTo(viewHeight)
-        }
-    }
-    
-    private func setUpStackView() {
-        stack.axis = .horizontal
-        stack.spacing = 20
-        stack.alignment = .leading
+        pages.append(vcOne)
+        pages.append(vcTwo)
+        pages.append(vcThree)
         
-        scroll.addSubview(stack)
-        stack.snp.makeConstraints { make in
-            make.left.right.top.bottom.equalToSuperview()
-        }
-    }
-    
-    private func setSeparator() {
-        separator.backgroundColor = .gray
-        self.addSubview(separator)
-        separator.snp.makeConstraints { make in
-            make.height.equalTo(1)
-            make.bottom.equalTo(stack).offset(5)
-            make.left.right.equalToSuperview()
-        }
-    }
-    
-    private func setHeighLighter() {
-        heighLighter.backgroundColor = .black
-        heighLighter.layer.cornerRadius = 2
-        
-        scroll.addSubview(heighLighter)
-        heighLighter.translatesAutoresizingMaskIntoConstraints = false
-        
-        heighLighter.heightAnchor.constraint(equalToConstant: 4).isActive = true
-        heighLighter.bottomAnchor.constraint(equalTo: stack.bottomAnchor, constant: 7).isActive = true
-        
-        leftConstraintForHeighLighter = heighLighter.leftAnchor.constraint(equalTo: labels[indexOfCurrentVC].leftAnchor)
-        leftConstraintForHeighLighter.isActive = true
-        
-        heightConstraintForHeighLighter = heighLighter.widthAnchor.constraint(equalToConstant: 50)
-        heightConstraintForHeighLighter.isActive = true
-    }
-    
-    @objc private func addForLabel(_ sender: UITapGestureRecognizer) {
-       
-        guard let index = defineIndexByRecognizer(sender: sender) else {
-            return
-        }
-        
-        indexOfCurrentVC = index
-        delegate?.shouldChangePresentedController(for: index)
-        
-        self.layoutIfNeeded()
-        UIView.animate(withDuration: 0.2) { [unowned self] in
-            self.leftConstraintForHeighLighter.isActive = false
-            self.leftConstraintForHeighLighter = heighLighter.leftAnchor.constraint(equalTo: labels[indexOfCurrentVC].leftAnchor)
-            self.leftConstraintForHeighLighter.isActive = true
-            self.heightConstraintForHeighLighter.constant = labels[indexOfCurrentVC].frame.width
-            self.layoutIfNeeded()
-        }
-    }
-    
-    private func defineIndexByRecognizer(sender: UITapGestureRecognizer) -> Int? {
-        
-        let senderLocation = sender.location(in: scroll)
-        var returnIndex: Int? = nil
-        
-        for labelIndex in 0..<labels.count {
-            let labelFrame = stack.arrangedSubviews[labelIndex].frame
-            let rangeOfLabel = labelFrame.origin.x..<labelFrame.origin.x + labelFrame.size.width
-            
-            if rangeOfLabel.contains(senderLocation.x) {
-                returnIndex = labelIndex
-                setScrollOffset(forViewInFrame: labelFrame)
-                break
-            } else {
-                continue
-            }
-        }
-        
-        return returnIndex
-    }
-    
-    private func setScrollOffset(forViewInFrame: CGRect) {
-        let endPointOfView = forViewInFrame.origin.x
-        
-        if (endPointOfView + forViewInFrame.origin.x) < scroll.frame.maxX {
-            scroll.setContentOffset(CGPoint(x: forViewInFrame.origin.x, y: 0), animated: true)
-        } else {
-            return
-        }
+        pageVC.setViewControllers([pages[initialVCIndex]], direction: .forward, animated: true, completion: nil)
     }
 }

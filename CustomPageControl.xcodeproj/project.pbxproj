@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		670BD33428A60B73007ABFE5 /* CustomPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 670BD33328A60B73007ABFE5 /* CustomPageControl.swift */; };
 		672659C828A3D53700938D64 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 672659C728A3D53700938D64 /* AppDelegate.swift */; };
 		672659CA28A3D53700938D64 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 672659C928A3D53700938D64 /* SceneDelegate.swift */; };
 		672659CC28A3D53700938D64 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 672659CB28A3D53700938D64 /* ViewController.swift */; };
@@ -18,6 +19,7 @@
 
 /* Begin PBXFileReference section */
 		0FD8A7A826ED467E73AD3633 /* Pods_CustomPageControl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CustomPageControl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		670BD33328A60B73007ABFE5 /* CustomPageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPageControl.swift; sourceTree = "<group>"; };
 		672659C428A3D53700938D64 /* CustomPageControl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CustomPageControl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		672659C728A3D53700938D64 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		672659C928A3D53700938D64 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 				672659D028A3D53B00938D64 /* Assets.xcassets */,
 				672659D228A3D53B00938D64 /* LaunchScreen.storyboard */,
 				672659D528A3D53B00938D64 /* Info.plist */,
+				670BD33328A60B73007ABFE5 /* CustomPageControl.swift */,
 			);
 			path = CustomPageControl;
 			sourceTree = "<group>";
@@ -88,7 +91,6 @@
 				9FFEC41DA245AEDEDC1DE6DB /* Pods-CustomPageControl.debug.xcconfig */,
 				CA28D30D471D93AD2FAD2312 /* Pods-CustomPageControl.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -210,6 +212,7 @@
 				672659CC28A3D53700938D64 /* ViewController.swift in Sources */,
 				672659C828A3D53700938D64 /* AppDelegate.swift in Sources */,
 				672659CA28A3D53700938D64 /* SceneDelegate.swift in Sources */,
+				670BD33428A60B73007ABFE5 /* CustomPageControl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
