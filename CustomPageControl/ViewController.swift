@@ -23,7 +23,6 @@ class ViewController: UIViewController {
 }
 
 
-
 final class IndexableLabel: UILabel {
     public var index: Int
     
@@ -35,6 +34,10 @@ final class IndexableLabel: UILabel {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+protocol customPageControlDelegate {
+    func shouldChangePresentedController(for index: Int)
 }
 
 final class CustomPageControl: UIView {
@@ -51,6 +54,8 @@ final class CustomPageControl: UIView {
     private var heightConstraintForHeighLighter = NSLayoutConstraint()
     
     private(set) var indexOfCurrentVC: Int = 0
+    
+    var delegate: customPageControlDelegate?
     
     init(taps: [String]) {
         self.taps = taps
@@ -142,6 +147,7 @@ final class CustomPageControl: UIView {
         }
         
         indexOfCurrentVC = index
+        delegate?.shouldChangePresentedController(for: index)
         
         self.layoutIfNeeded()
         UIView.animate(withDuration: 0.2) { [unowned self] in
