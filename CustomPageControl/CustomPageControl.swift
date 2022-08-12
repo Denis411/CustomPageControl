@@ -20,7 +20,7 @@ final class IndexableLabel: UILabel {
     }
 }
 
-protocol customPageControlDelegate {
+protocol CustomPageControlDelegate {
     func shouldChangePresentedController(for index: Int)
 }
 
@@ -39,7 +39,7 @@ final class CustomPageControl: UIView {
     
     private(set) var indexOfCurrentVC: Int = 0
     
-    var delegate: customPageControlDelegate?
+    var delegate: CustomPageControlDelegate?
     
     init(taps: [String]) {
         self.taps = taps
