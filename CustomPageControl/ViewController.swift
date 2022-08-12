@@ -101,3 +101,4 @@ extension ViewController: UIPageViewControllerDataSource, UIPageViewControllerDe
     }
 }
 
+extension ViewController
