@@ -55,6 +55,7 @@ final class CustomPageControl: UIView {
         guard indexOfCurrentVC != index else { return }
         self.indexOfCurrentVC = index
         animateTransitionBetweenTaps()
+        setScrollOffsetForLabel(at: index)
     }
     
     private func setUpUI() {
@@ -178,5 +179,11 @@ final class CustomPageControl: UIView {
         } else {
             return
         }
+    }
+    
+    private func setScrollOffsetForLabel(at Index: Int) {
+        let labelFrame = stack.arrangedSubviews[Index].frame
+        setScrollOffset(forViewInFrame: labelFrame)
+        
     }
 }
