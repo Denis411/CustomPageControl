@@ -1,0 +1,11 @@
+Swift.gitignore
+xcuserdata/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+.build/
+/Pods
+*.xcworkspace
+Dependencies/
+.accio/
